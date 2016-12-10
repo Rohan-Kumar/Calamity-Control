@@ -1,8 +1,8 @@
 package com.nest.calamitycontrol;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -38,8 +38,10 @@ public class VolunteerActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Register new Volunteer", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                startActivity(new Intent(VolunteerActivity.this, NewVolunteerActivity.class));
+                finish();
+//                Snackbar.make(view, "Register new Volunteer", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
             }
         });
 
@@ -88,7 +90,7 @@ public class VolunteerActivity extends AppCompatActivity {
     class RVAdapter extends RecyclerView.Adapter<RVAdapter.Holder> {
         @Override
         public RVAdapter.Holder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new RVAdapter.Holder(LayoutInflater.from(VolunteerActivity.this).inflate(R.layout.single_donation, parent, false));
+            return new RVAdapter.Holder(LayoutInflater.from(VolunteerActivity.this).inflate(R.layout.single_volunteer, parent, false));
         }
 
         @Override

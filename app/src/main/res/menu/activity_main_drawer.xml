@@ -5,7 +5,7 @@
         <item
             android:id="@+id/nav_donate"
             android:icon="@drawable/ic_menu_camera"
-            android:title="Donate" />
+            android:title="Donations" />
         <item
             android:id="@+id/nav_emergency"
             android:icon="@drawable/ic_menu_gallery"
