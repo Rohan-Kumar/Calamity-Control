@@ -72,7 +72,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 for (DataSnapshot data : dataSnapshot.getChildren()) {
                     double lat = data.child("lat").getValue(Double.class);
-                    double lng = data.child("lat").getValue(Double.class);
+                    double lng = data.child("lng").getValue(Double.class);
                     LatLng latLng = new LatLng(lat,lng);
                     heatMapList.add(latLng);
                     builder.include(latLng);

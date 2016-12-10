@@ -88,7 +88,8 @@ public class MainActivity extends AppCompatActivity
             intent = new Intent(MainActivity.this,EmergencyActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_maps) {
-
+            intent = new Intent(MainActivity.this,MapsActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_volunteer) {
 
         }
