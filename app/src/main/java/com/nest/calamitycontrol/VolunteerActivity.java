@@ -21,16 +21,16 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class DonationsActivity extends AppCompatActivity {
+public class VolunteerActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
     RVAdapter mAdapter;
-    ArrayList<DonationsData> dataModelArrayList = new ArrayList<>();
+    ArrayList<VolunteerData> dataModelArrayList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_donations);
+        setContentView(R.layout.activity_volunteer);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -38,18 +38,19 @@ public class DonationsActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Add donation", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Register new Volunteer", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
 
         setupRecyclerView();
         getData();
+
     }
 
     private void setupRecyclerView() {
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(DonationsActivity.this);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(VolunteerActivity.this);
         recyclerView.setLayoutManager(layoutManager);
         mAdapter = new RVAdapter();
         recyclerView.setAdapter(mAdapter);
@@ -58,16 +59,16 @@ public class DonationsActivity extends AppCompatActivity {
     private void getData() {
         DatabaseReference databaseRef;
 
-        databaseRef = FirebaseDatabase.getInstance().getReference("donations");
+        databaseRef = FirebaseDatabase.getInstance().getReference("volunteers");
 
 
         databaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot data : dataSnapshot.getChildren()) {
-                    DonationsData datamodel = new DonationsData();
+                    VolunteerData datamodel = new VolunteerData();
                     datamodel.setName(data.child("name").getValue(String.class));
-                    datamodel.setDonationItem(data.child("item").getValue(String.class));
+                    datamodel.setNumber(data.child("number").getValue(String.class));
                     datamodel.setPlace(data.child("place").getValue(String.class));
                     dataModelArrayList.add(datamodel);
                 }
@@ -87,14 +88,14 @@ public class DonationsActivity extends AppCompatActivity {
     class RVAdapter extends RecyclerView.Adapter<RVAdapter.Holder> {
         @Override
         public RVAdapter.Holder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new Holder(LayoutInflater.from(DonationsActivity.this).inflate(R.layout.single_donation, parent, false));
+            return new RVAdapter.Holder(LayoutInflater.from(VolunteerActivity.this).inflate(R.layout.single_donation, parent, false));
         }
 
         @Override
         public void onBindViewHolder(RVAdapter.Holder holder, int position) {
             holder.name.setText(dataModelArrayList.get(position).getName());
             holder.place.setText(dataModelArrayList.get(position).getPlace());
-            holder.donation.setText(dataModelArrayList.get(position).getDonationItem());
+            holder.number.setText(dataModelArrayList.get(position).getNumber());
 
         }
 
@@ -105,16 +106,17 @@ public class DonationsActivity extends AppCompatActivity {
 
         class Holder extends RecyclerView.ViewHolder {
 
-            TextView name, donation, place;
+            TextView name, number, place;
 
             public Holder(View itemView) {
                 super(itemView);
                 name = (TextView) itemView.findViewById(R.id.name);
-                donation = (TextView) itemView.findViewById(R.id.item);
+                number = (TextView) itemView.findViewById(R.id.number);
                 place = (TextView) itemView.findViewById(R.id.location);
             }
 
         }
 
     }
+
 }
