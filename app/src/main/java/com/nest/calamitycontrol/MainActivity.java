@@ -79,19 +79,15 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-        Intent intent;
 
         if (id == R.id.nav_donate) {
-            intent = new Intent(MainActivity.this,DonationsActivity.class);
-            startActivity(intent);
+            startActivity(new Intent(MainActivity.this, DonationsActivity.class));
         } else if (id == R.id.nav_emergency) {
-            intent = new Intent(MainActivity.this,EmergencyActivity.class);
-            startActivity(intent);
+            startActivity(new Intent(MainActivity.this, EmergencyActivity.class));
         } else if (id == R.id.nav_maps) {
-            intent = new Intent(MainActivity.this,MapsActivity.class);
-            startActivity(intent);
+            startActivity(new Intent(MainActivity.this, MapsActivity.class));
         } else if (id == R.id.nav_volunteer) {
-
+            startActivity(new Intent(MainActivity.this, VolunteerActivity.class));
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
