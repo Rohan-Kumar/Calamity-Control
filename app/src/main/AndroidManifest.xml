@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -26,7 +27,8 @@
         <activity
             android:name=".DonationsActivity"
             android:label="@string/title_activity_donations"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".EmergencyActivity"></activity>
     </application>
 
 </manifest>

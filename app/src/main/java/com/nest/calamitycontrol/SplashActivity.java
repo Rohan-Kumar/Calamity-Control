@@ -20,10 +20,11 @@ public class SplashActivity extends AppCompatActivity {
             public void run() {
                 Intent intent;
                 if (hasConnection(SplashActivity.this))
-                    intent = new Intent(SplashActivity.this, SplashActivity.class);
+                    intent = new Intent(SplashActivity.this, MainActivity.class);
                 else
                     intent = new Intent(SplashActivity.this, IVRActivity.class);
                 startActivity(intent);
+                finish();
             }
         }, 1000);
     }

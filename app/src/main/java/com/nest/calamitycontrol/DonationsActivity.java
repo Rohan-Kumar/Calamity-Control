@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -87,7 +88,7 @@ public class DonationsActivity extends AppCompatActivity {
     class RVAdapter extends RecyclerView.Adapter<RVAdapter.Holder> {
         @Override
         public RVAdapter.Holder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return null;
+            return new Holder(LayoutInflater.from(DonationsActivity.this).inflate(R.layout.single_donation, parent, false));
         }
 
         @Override

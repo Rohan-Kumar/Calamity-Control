@@ -1,5 +1,6 @@
 package com.nest.calamitycontrol;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -78,11 +79,14 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        Intent intent;
 
         if (id == R.id.nav_donate) {
-
+            intent = new Intent(MainActivity.this,DonationsActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_emergency) {
-
+            intent = new Intent(MainActivity.this,EmergencyActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_maps) {
 
         } else if (id == R.id.nav_volunteer) {
