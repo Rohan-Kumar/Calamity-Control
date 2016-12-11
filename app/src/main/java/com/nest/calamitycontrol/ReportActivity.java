@@ -2,15 +2,13 @@ package com.nest.calamitycontrol;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ActivityCompat;
+import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -21,12 +19,6 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
@@ -37,6 +29,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -44,19 +37,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ReportActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class ReportActivity extends AppCompatActivity {
 
     private static final int REQUEST_IMAGE_CAPTURE = 54321;
     Spinner spinner;
     ImageView imageView;
     int selectedCalamity = 0;
     boolean selectedImage = false;
-    LocationRequest locationRequest;
-    GoogleApiClient googleApiClient;
-    double latitude;
-    double longitude;
     List<String> list = new ArrayList<String>();
     ProgressDialog dialog;
+    TextInputEditText description;
+
+    double latitude;
+    double longitude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,14 +58,13 @@ public class ReportActivity extends AppCompatActivity implements GoogleApiClient
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        connectToApi();
+        latitude = getIntent().getDoubleExtra("latitude", 0.0);
+        longitude = getIntent().getDoubleExtra("longitude", 0.0);
+
         selectedImage = false;
-        dialog = new ProgressDialog(ReportActivity.this);
-        dialog.setIndeterminate(true);
-        dialog.setTitle("Fetching location");
-        dialog.show();
 
         spinner = (Spinner) findViewById(R.id.spinner);
+        description = (TextInputEditText) findViewById(R.id.desc);
 
         list.add("Select a Calamity");
         list.add("Earthquake");
@@ -106,8 +98,6 @@ public class ReportActivity extends AppCompatActivity implements GoogleApiClient
             @Override
             public void onClick(View view) {
                 sendData();
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
             }
         });
     }
@@ -116,11 +106,10 @@ public class ReportActivity extends AppCompatActivity implements GoogleApiClient
         if (selectedCalamity == 0)
             Toast.makeText(this, "Please select something to report", Toast.LENGTH_SHORT).show();
         else {
-            googleApiClient.disconnect();
 
             if (selectedImage) {
                 dialog.setTitle("Sending Report");
-                dialog.setMessage("Blah Blah Blah...");
+                dialog.setMessage("Please wait...");
                 dialog.show();
                 FirebaseStorage storage = FirebaseStorage.getInstance();
                 StorageReference storageRef = storage.getReferenceFromUrl("gs://calamity-control-1478121312942.appspot.com");
@@ -167,8 +156,11 @@ public class ReportActivity extends AppCompatActivity implements GoogleApiClient
 
             databaseRef.updateChildren(childUpdates);
 
+            new HttpCall("http://204.152.203.111/test-cgi/genTweet.py?tweet=" + URLEncoder.encode(description.getText().toString() + " #CalamityControl"), findViewById(R.id.content_report)).execute();
+
+
             Toast.makeText(ReportActivity.this, "Thank you for your registering as a volunteer", Toast.LENGTH_SHORT).show();
-            if (!selectedImage){
+            if (!selectedImage) {
                 startActivity(new Intent(ReportActivity.this, MainActivity.class));
                 finish();
             }
@@ -204,69 +196,6 @@ public class ReportActivity extends AppCompatActivity implements GoogleApiClient
         }
     }
 
-    public void connectToApi() {
-        if (GooglePlayServicesUtil.isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS) {
-            googleApiClient = new GoogleApiClient.Builder(this)
-                    .addApi(LocationServices.API)
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    .build();
-
-            if (!googleApiClient.isConnected() || !googleApiClient.isConnecting()) {
-                googleApiClient.connect();
-                Log.d("TAG", "connect");
-            }
-        } else {
-            Log.e("TAG", "unable to connect to google play services.");
-        }
-
-    }
-
-    @Override
-    public void onConnected(Bundle bundle) {
-        locationRequest = LocationRequest.create();
-        locationRequest.setInterval(1000); // milliseconds
-        locationRequest.setFastestInterval(1000); // the fastest rate in milliseconds at which your app can handle location updates
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-
-        getLocation();
-
-    }
-
-    private void getLocation() {
-        // shows an error but works if this permission check is not added.
-        // here you get the location with location service/gps is on
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        LocationServices.FusedLocationApi.requestLocationUpdates(
-                googleApiClient, locationRequest, new LocationListener() {
-                    @Override
-                    public void onLocationChanged(Location location) {
-                        if (dialog.isShowing())
-                            dialog.dismiss();
-                        latitude = location.getLatitude();
-                        longitude = location.getLongitude();
-                    }
-                });
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-
-    }
 
     public static String getCurrentTimeStamp() {
         try {
@@ -282,9 +211,5 @@ public class ReportActivity extends AppCompatActivity implements GoogleApiClient
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        googleApiClient.disconnect();
-    }
+
 }
