@@ -1,6 +1,5 @@
 package com.nest.calamitycontrol;
 
-import android.*;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -70,7 +69,7 @@ public class EmergencyActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     Intent phoneIntent = new Intent(Intent.ACTION_CALL);
-                    phoneIntent.setData(Uri.parse("tel:"+dataModelArrayList.get(position).getNumber()));
+                    phoneIntent.setData(Uri.parse("tel:" + dataModelArrayList.get(position).getNumber()));
                     if (ActivityCompat.checkSelfPermission(EmergencyActivity.this, android.Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
                         // TODO: Consider calling
                         //    ActivityCompat#requestPermissions
@@ -105,7 +104,8 @@ public class EmergencyActivity extends AppCompatActivity {
         }
 
     }
-    class EmergencyData{
+
+    class EmergencyData {
         String name;
         String number;
 
