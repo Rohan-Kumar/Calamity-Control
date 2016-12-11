@@ -23,7 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="12dp">
+            android:padding="4dp">
 
             <TextView
                 android:id="@+id/name"
@@ -32,6 +32,7 @@
                 android:textStyle="bold"
                 android:textSize="20sp"
                 android:gravity="center"
+                android:paddingTop="6dp"
                 android:text="Name" />
 
             <TextView
@@ -58,6 +59,7 @@
                 android:textSize="12dp"
                 android:id="@+id/number"
                 android:textColor="@android:color/white"
+                android:layout_marginBottom="6dp"
                 android:backgroundTint="#4CAF50"/>
 
         </LinearLayout>
