@@ -4,7 +4,7 @@
     android:id="@+id/card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
+    android:layout_margin="@dimen/cardview_layout_margin"
     android:elevation="@dimen/cardview_default_elevation"
     card_view:cardCornerRadius="@dimen/cardview_default_radius">
 
@@ -58,7 +58,7 @@
                         android:id="@+id/location"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="16dp"
+                        android:textSize="14dp"
                         android:text="Hosur Road" />
 
                 </LinearLayout>
@@ -80,7 +80,7 @@
                         android:id="@+id/item"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:text="Pizza" />
 
                 </LinearLayout>

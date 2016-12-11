@@ -1,15 +1,21 @@
 package com.nest.calamitycontrol;
 
+import android.*;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -52,7 +58,7 @@ public class VolunteerActivity extends AppCompatActivity {
 
     private void setupRecyclerView() {
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(VolunteerActivity.this);
+        RecyclerView.LayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
         mAdapter = new RVAdapter();
         recyclerView.setAdapter(mAdapter);
@@ -94,10 +100,28 @@ public class VolunteerActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onBindViewHolder(RVAdapter.Holder holder, int position) {
+        public void onBindViewHolder(RVAdapter.Holder holder, final int position) {
             holder.name.setText(dataModelArrayList.get(position).getName());
             holder.place.setText(dataModelArrayList.get(position).getPlace());
             holder.number.setText(dataModelArrayList.get(position).getNumber());
+            holder.number.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent phoneIntent = new Intent(Intent.ACTION_CALL);
+                    phoneIntent.setData(Uri.parse("tel:"+dataModelArrayList.get(position).getNumber()));
+                    if (ActivityCompat.checkSelfPermission(VolunteerActivity.this, android.Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                        // TODO: Consider calling
+                        //    ActivityCompat#requestPermissions
+                        // here to request the missing permissions, and then overriding
+                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                        //                                          int[] grantResults)
+                        // to handle the case where the user grants the permission. See the documentation
+                        // for ActivityCompat#requestPermissions for more details.
+                        return;
+                    }
+                    startActivity(phoneIntent);
+                }
+            });
 
         }
 
@@ -108,12 +132,13 @@ public class VolunteerActivity extends AppCompatActivity {
 
         class Holder extends RecyclerView.ViewHolder {
 
-            TextView name, number, place;
+            TextView name, place;
+            Button number;
 
             public Holder(View itemView) {
                 super(itemView);
                 name = (TextView) itemView.findViewById(R.id.name);
-                number = (TextView) itemView.findViewById(R.id.number);
+                number = (Button) itemView.findViewById(R.id.number);
                 place = (TextView) itemView.findViewById(R.id.location);
             }
 
