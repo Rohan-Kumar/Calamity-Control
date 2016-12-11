@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 sendQuickReport();
+
             }
         });
 
@@ -82,7 +83,7 @@ public class MainActivity extends AppCompatActivity
 
     private void sendQuickReport() {
 
-        new HttpCall("http://204.152.203.111/test-cgi/report.py?lat=" + latitude + "&lon=" + longitude, findViewById(R.id.content_main)).execute();
+        new HttpCall("http://204.152.203.111/test-cgi/report.py?lat=" + latitude + "&lon=" + longitude, findViewById(R.id.content_main),MainActivity.this).execute();
     }
 
     @Override
@@ -110,6 +111,8 @@ public class MainActivity extends AppCompatActivity
             startActivity(new Intent(MainActivity.this, MapsActivity.class));
         } else if (id == R.id.nav_volunteer) {
             startActivity(new Intent(MainActivity.this, VolunteerActivity.class));
+        } else if (id == R.id.nav_timeline) {
+            startActivity(new Intent(MainActivity.this, TimelineActivity.class));
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

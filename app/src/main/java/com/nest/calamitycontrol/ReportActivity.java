@@ -45,7 +45,7 @@ public class ReportActivity extends AppCompatActivity {
     int selectedCalamity = 0;
     boolean selectedImage = false;
     List<String> list = new ArrayList<String>();
-    ProgressDialog dialog;
+//    ProgressDialog dialog;
     TextInputEditText description;
 
     double latitude;
@@ -109,9 +109,9 @@ public class ReportActivity extends AppCompatActivity {
         else {
 
             if (selectedImage) {
-                dialog.setTitle("Sending Report");
-                dialog.setMessage("Please wait...");
-                dialog.show();
+//                dialog.setTitle("Sending Report");
+//                dialog.setMessage("Please wait...");
+//                dialog.show();
                 FirebaseStorage storage = FirebaseStorage.getInstance();
                 StorageReference storageRef = storage.getReferenceFromUrl("gs://calamity-control-1478121312942.appspot.com");
                 storageRef = storageRef.child(getCurrentTimeStamp().replaceAll(" ", "") + ".png");
@@ -133,7 +133,7 @@ public class ReportActivity extends AppCompatActivity {
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
                         Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                        dialog.dismiss();
+//                        dialog.dismiss();
                         Log.d("TAG", "onSuccess: " + downloadUrl);
                         startActivity(new Intent(ReportActivity.this, MainActivity.class));
                         finish();
@@ -150,6 +150,7 @@ public class ReportActivity extends AppCompatActivity {
             postValues.put("lat", latitude);
             postValues.put("lng", longitude);
             postValues.put("time", getCurrentTimeStamp());
+            postValues.put("description", description.getText().toString());
             postValues.put("calamity", list.get(selectedCalamity));
 
             Map<String, Object> childUpdates = new HashMap<>();
@@ -157,7 +158,7 @@ public class ReportActivity extends AppCompatActivity {
 
             databaseRef.updateChildren(childUpdates);
 
-            new HttpCall("http://204.152.203.111/test-cgi/genTweet.py?tweet=" + URLEncoder.encode(description.getText().toString() + " #CalamityControl"), findViewById(R.id.content_report)).execute();
+            new HttpCall("http://204.152.203.111/test-cgi/genTweet.py?tweet=" + URLEncoder.encode(description.getText().toString() + " #CalamityControl"), findViewById(R.id.content_report),ReportActivity.this).execute();
 
 
             Toast.makeText(ReportActivity.this, "Thank you for your registering as a volunteer", Toast.LENGTH_SHORT).show();

@@ -1,5 +1,7 @@
 package com.nest.calamitycontrol;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
@@ -27,18 +29,32 @@ public class HttpCall extends AsyncTask<Void, Void, Void> {
 
     String urlString;
     View view;
+    Context context;
 
-    HttpCall(String url, View view) {
+    ProgressDialog dialog;
+    HttpCall(String url, View view, Context context) {
         urlString = url;
         this.view = view;
+        this.context = context;
     }
 
+
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+
+        dialog = new ProgressDialog(context);
+        dialog.setIndeterminate(true);
+        dialog.setTitle("Loading");
+        dialog.setMessage("please wait...");
+        dialog.show();
+    }
 
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
         Snackbar.make(view, "Reported!", LENGTH_SHORT).show();
-
+        dialog.dismiss();
     }
 
     @Override
