@@ -75,6 +75,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     double lng = data.child("lng").getValue(Double.class);
                     LatLng latLng = new LatLng(lat,lng);
                     heatMapList.add(latLng);
+                    heatMapList.add(latLng);
+                    heatMapList.add(latLng);
+                    heatMapList.add(latLng);
+                    heatMapList.add(latLng);
+                    heatMapList.add(latLng);
                     builder.include(latLng);
                 }
                 LatLngBounds bounds = builder.build();

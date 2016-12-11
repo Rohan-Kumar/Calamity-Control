@@ -7,11 +7,13 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -20,6 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -56,6 +59,62 @@ public class TimelineActivity extends AppCompatActivity {
 
         databaseRef = FirebaseDatabase.getInstance().getReference("reports");
 
+        databaseRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+//                dataModelArrayList.clear();
+                Log.d("TAG", "onChildAdded: ");
+                for (DataSnapshot data : dataSnapshot.getChildren()) {
+                    if (data.child("description").exists()) {
+                        TimelineData datamodel = new TimelineData();
+                        datamodel.setName(data.child("calamity").getValue(String.class));
+                        datamodel.setDesc(data.child("description").getValue(String.class));
+                        datamodel.setTime(data.child("time").getValue(String.class));
+//                    datamodel.setPlace(data.child("place").getValue(String.class));
+
+
+                        try {
+                            Geocoder geocoder;
+                            List<Address> addresses;
+                            geocoder = new Geocoder(TimelineActivity.this, Locale.getDefault());
+                            addresses = geocoder.getFromLocation(data.child("lat").getValue(Double.class), data.child("lng").getValue(Double.class), 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+                            String city = addresses.get(0).getLocality(); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+                            String country = addresses.get(0).getCountryName();
+                            String place = city + "," + country;
+                            datamodel.setPlace(place);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+
+                        dataModelArrayList.add(datamodel);
+
+                    }
+                }
+                mAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
 
         databaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -87,6 +146,7 @@ public class TimelineActivity extends AppCompatActivity {
 
                     }
                 }
+                Collections.reverse(dataModelArrayList);
                 mAdapter.notifyDataSetChanged();
                 dialog.dismiss();
             }
