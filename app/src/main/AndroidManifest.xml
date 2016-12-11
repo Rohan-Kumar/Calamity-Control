@@ -79,7 +79,9 @@
             android:label="@string/title_activity_report"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".TimelineActivity"></activity>
+        <activity
+            android:name=".TimelineActivity"
+            android:parentActivityName=".MainActivity"/>
     </application>
 
 </manifest>

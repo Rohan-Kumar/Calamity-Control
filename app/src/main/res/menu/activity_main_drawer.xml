@@ -20,7 +20,7 @@
             android:title="Emergency Contacts" />
         <item
             android:id="@+id/nav_timeline"
-            android:icon="@drawable/emergency"
+            android:icon="@drawable/timeline"
             android:title="Timeline" />
     </group>
 

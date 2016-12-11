@@ -135,8 +135,8 @@ public class ReportActivity extends AppCompatActivity {
                         Uri downloadUrl = taskSnapshot.getDownloadUrl();
 //                        dialog.dismiss();
                         Log.d("TAG", "onSuccess: " + downloadUrl);
-                        startActivity(new Intent(ReportActivity.this, MainActivity.class));
-                        finish();
+//                        startActivity(new Intent(ReportActivity.this, MainActivity.class));
+//                        finish();
 
                     }
                 });
@@ -163,8 +163,8 @@ public class ReportActivity extends AppCompatActivity {
 
             Toast.makeText(ReportActivity.this, "Thank you for your registering as a volunteer", Toast.LENGTH_SHORT).show();
             if (!selectedImage) {
-                startActivity(new Intent(ReportActivity.this, MainActivity.class));
-                finish();
+//                startActivity(new Intent(ReportActivity.this, MainActivity.class));
+//                finish();
             }
 
         }
