@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "552005603735",
+    "firebase_url": "https://calamity-control-1478121312942.firebaseio.com",
+    "project_id": "calamity-control-1478121312942",
+    "storage_bucket": "calamity-control-1478121312942.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:552005603735:android:65916dd2cd694b88",
+        "android_client_info": {
+          "package_name": "com.nest.calamitycontrol"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "552005603735-er6qltssu2345l7hnq4elglnal0ni486.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nest.calamitycontrol",
+            "certificate_hash": "E331FCCCD8B9E441F3876D7D38A506F433973446"
+          }
+        },
+        {
+          "client_id": "552005603735-rus001vs7n6q7ivt4t78qi503lqm1tu0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQmLWKuKgFbfmHJg22IrzVf7MMRD2q1d4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "552005603735-rus001vs7n6q7ivt4t78qi503lqm1tu0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
