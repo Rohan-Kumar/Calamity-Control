@@ -282,5 +282,9 @@ public class ReportActivity extends AppCompatActivity implements GoogleApiClient
         }
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        googleApiClient.disconnect();
+    }
 }
