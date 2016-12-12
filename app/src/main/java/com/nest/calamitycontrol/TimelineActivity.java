@@ -59,6 +59,7 @@ public class TimelineActivity extends AppCompatActivity {
 
         databaseRef = FirebaseDatabase.getInstance().getReference("reports");
 
+/*
         databaseRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -114,6 +115,7 @@ public class TimelineActivity extends AppCompatActivity {
 
             }
         });
+*/
 
 
         databaseRef.addListenerForSingleValueEvent(new ValueEventListener() {

@@ -1,5 +1,6 @@
 package com.nest.calamitycontrol;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -13,12 +14,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class EmergencyActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     RVAdapter mAdapter;
     ArrayList<EmergencyData> dataModelArrayList = new ArrayList<>();
+    ProgressDialog dialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,23 +36,44 @@ public class EmergencyActivity extends AppCompatActivity {
         setContentView(R.layout.activity_emergency);
 
         setupRecyclerView();
-        setData();
+        getData();
+
+        dialog = new ProgressDialog(EmergencyActivity.this);
+        dialog.setIndeterminate(true);
+        dialog.setTitle("Loading");
+        dialog.setMessage("please wait...");
+        dialog.show();
     }
 
-    private void setData() {
-        EmergencyData data;
-        data = new EmergencyData();
-        data.setName("Rohan");
-        data.setNumber("8792414258");
-        dataModelArrayList.add(data);
-        data = new EmergencyData();
-        data.setName("Darshan");
-        data.setNumber("9742934099");
-        dataModelArrayList.add(data);
-        data = new EmergencyData();
-        data.setName("Amruth");
-        data.setNumber("9845336113");
-        dataModelArrayList.add(data);
+    private void getData() {
+
+        DatabaseReference databaseRef;
+
+        databaseRef = FirebaseDatabase.getInstance().getReference("reports");
+
+
+        databaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot data : dataSnapshot.getChildren()) {
+                    EmergencyData datamodel = new EmergencyData();
+                    datamodel.setName(data.child("name").getValue(String.class));
+                    datamodel.setNumber(data.child("number").getValue(String.class));
+
+                    dataModelArrayList.add(datamodel);
+
+                }
+                Collections.reverse(dataModelArrayList);
+                mAdapter.notifyDataSetChanged();
+                dialog.dismiss();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
         mAdapter.notifyDataSetChanged();
     }
 
@@ -105,25 +136,5 @@ public class EmergencyActivity extends AppCompatActivity {
 
     }
 
-    class EmergencyData {
-        String name;
-        String number;
 
-        public String getNumber() {
-            return number;
-        }
-
-        public void setNumber(String number) {
-            this.number = number;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-    }
 }
