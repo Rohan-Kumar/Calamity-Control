@@ -171,9 +171,9 @@ public class TimelineActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(RVAdapter.Holder holder, int position) {
             holder.name.setText(dataModelArrayList.get(position).getName());
+            holder.desc.setText(dataModelArrayList.get(position).getDesc());
             holder.place.setText(dataModelArrayList.get(position).getPlace());
             holder.time.setText(dataModelArrayList.get(position).getTime());
-            holder.desc.setText(dataModelArrayList.get(position).getDesc());
 
         }
 
