@@ -141,6 +141,8 @@ public class TimelineActivity extends AppCompatActivity {
                             datamodel.setPlace(place);
                         } catch (IOException e) {
                             e.printStackTrace();
+                        } catch (IndexOutOfBoundsException i){
+                            i.printStackTrace();
                         }
 
 
