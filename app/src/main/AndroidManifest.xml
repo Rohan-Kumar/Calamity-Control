@@ -81,7 +81,12 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".TimelineActivity"
-            android:parentActivityName=".MainActivity"/>
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".DetailedReportActivity"
+            android:label="Calamity Control"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
     </application>
 
 </manifest>

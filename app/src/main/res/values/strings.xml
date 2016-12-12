@@ -10,4 +10,18 @@
     <string name="title_activity_volunteer">Volunteers</string>
     <string name="title_activity_maps">Heatmap</string>
     <string name="title_activity_report">Reports</string>
-</resources>
+    <string-array name="calamity_types">
+        <item>Cyclone</item>
+        <item>Earthquake</item>
+        <item>Tsunami</item>
+        <item>Hurricane</item>
+        <item>Tornado</item>
+        <item>Floods</item>
+        <item>Drought</item>
+        <item>Others</item>
+
+    </string-array>
+
+    <string name="warning">This information would be shared publicly, to help contact you in distress. <b>It\'s optional to share your contact information.</b> </string>
+    <string name="title_activity_detailed_report">DetailedReportActivity</string>
+   </resources>

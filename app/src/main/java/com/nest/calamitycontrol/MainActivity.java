@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity
         detailedReport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, ReportActivity.class);
+                Intent intent = new Intent(MainActivity.this, DetailedReportActivity.class);
                 intent.putExtra("latitude", latitude);
                 intent.putExtra("longitude", longitude);
                 startActivity(intent);
