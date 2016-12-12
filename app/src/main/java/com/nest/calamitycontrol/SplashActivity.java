@@ -46,6 +46,7 @@ public class SplashActivity extends AppCompatActivity {
                 //Displaying another toast if permission is not granted
                 Intent intent = new Intent(SplashActivity.this, IVRActivity.class);
                 startActivity(intent);
+                finish();
             }
         }
     }

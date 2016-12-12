@@ -45,11 +45,13 @@ public class ReportActivity extends AppCompatActivity {
     int selectedCalamity = 0;
     boolean selectedImage = false;
     List<String> list = new ArrayList<String>();
-//    ProgressDialog dialog;
+    ProgressDialog dialog;
     TextInputEditText description;
 
     double latitude;
     double longitude;
+
+    Uri downloadUrl = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,72 +105,109 @@ public class ReportActivity extends AppCompatActivity {
         });
     }
 
-    private void sendData() {
+    private void sendData(){
+
         if (selectedCalamity == 0)
             Toast.makeText(this, "Please select something to report", Toast.LENGTH_SHORT).show();
         else {
 
+            dialog = new ProgressDialog(ReportActivity.this);
+            dialog.setMessage("loading...");
+            dialog.show();
+            updateDatabase();
+        }
+
+    }
+
+   /* private void sendData() {
+        if (selectedCalamity == 0)
+            Toast.makeText(this, "Please select something to report", Toast.LENGTH_SHORT).show();
+        else {
             if (selectedImage) {
 //                dialog.setTitle("Sending Report");
 //                dialog.setMessage("Please wait...");
 //                dialog.show();
-                FirebaseStorage storage = FirebaseStorage.getInstance();
-                StorageReference storageRef = storage.getReferenceFromUrl("gs://calamity-control-1478121312942.appspot.com");
-                storageRef = storageRef.child(getCurrentTimeStamp().replaceAll(" ", "") + ".png");
-                imageView.setDrawingCacheEnabled(true);
-                imageView.buildDrawingCache();
-                Bitmap bitmap = imageView.getDrawingCache();
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                byte[] data = baos.toByteArray();
 
-                UploadTask uploadTask = storageRef.putBytes(data);
-                uploadTask.addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        // Handle unsuccessful uploads
-                    }
-                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
-                        Uri downloadUrl = taskSnapshot.getDownloadUrl();
-//                        dialog.dismiss();
-                        Log.d("TAG", "onSuccess: " + downloadUrl);
-//                        startActivity(new Intent(ReportActivity.this, MainActivity.class));
-//                        finish();
-
-                    }
-                });
-            }
-
-            DatabaseReference databaseRef;
-            databaseRef = FirebaseDatabase.getInstance().getReference("reports");
-            String key = databaseRef.push().getKey();
-
-            final Map<String, Object> postValues = new HashMap<>();
-            postValues.put("lat", latitude);
-            postValues.put("lng", longitude);
-            postValues.put("time", getCurrentTimeStamp());
-            postValues.put("description", description.getText().toString());
-            postValues.put("calamity", list.get(selectedCalamity));
-
-            Map<String, Object> childUpdates = new HashMap<>();
-            childUpdates.put("/" + key, postValues);
-
-            databaseRef.updateChildren(childUpdates);
-
-            new HttpCall("http://204.152.203.111/test-cgi/genTweet.py?tweet=" + URLEncoder.encode(description.getText().toString() + " #CalamityControl"), findViewById(R.id.content_report),ReportActivity.this).execute();
+            }else
+                updateDatabase();
 
 
-            Toast.makeText(ReportActivity.this, "Thank you for your registering as a volunteer", Toast.LENGTH_SHORT).show();
-            if (!selectedImage) {
-//                startActivity(new Intent(ReportActivity.this, MainActivity.class));
-//                finish();
-            }
 
         }
 
+    }*/
+
+    private void updateDatabase() {
+
+        DatabaseReference databaseRef;
+        databaseRef = FirebaseDatabase.getInstance().getReference("reports");
+        String key = databaseRef.push().getKey();
+
+        final Map<String, Object> postValues = new HashMap<>();
+        postValues.put("lat", latitude);
+        postValues.put("lng", longitude);
+        postValues.put("time", getCurrentTimeStamp());
+        postValues.put("description", description.getText().toString());
+        postValues.put("calamity", list.get(selectedCalamity));
+        if(selectedImage){
+            postValues.put("isImagePresent",true);
+        }
+
+        Map<String, Object> childUpdates = new HashMap<>();
+        childUpdates.put("/" + key, postValues);
+
+        databaseRef.updateChildren(childUpdates).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                downloadUrl = null;
+                Log.d("TAG", "onSuccess: updated to db");
+            }
+        });
+
+        new HttpCall("http://204.152.203.111/test-cgi/genTweet.py?tweet=" + URLEncoder.encode(description.getText().toString() + " #CalamityControl"), findViewById(R.id.content_report),ReportActivity.this).execute();
+
+
+        if (!selectedImage) {
+            dialog.dismiss();
+//                startActivity(new Intent(ReportActivity.this, MainActivity.class));
+//                finish();
+        }else{
+            uploadPic(key);
+        }
+
+    }
+
+    private void uploadPic(String key) {
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReferenceFromUrl("gs://calamity-control-1478121312942.appspot.com/images");
+//        storageRef = storageRef.child(getCurrentTimeStamp().replaceAll(" ", "") + ".png");
+        storageRef = storageRef.child(key+".png");
+        imageView.setDrawingCacheEnabled(true);
+        imageView.buildDrawingCache();
+        Bitmap bitmap = imageView.getDrawingCache();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
+
+        UploadTask uploadTask = storageRef.putBytes(data);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle unsuccessful uploads
+                dialog.dismiss();
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+                downloadUrl = taskSnapshot.getDownloadUrl();
+                Log.d("TAG", "onSuccess: " + downloadUrl);
+                dialog.dismiss();
+//                        startActivity(new Intent(ReportActivity.this, MainActivity.class));
+//                        finish();
+
+            }
+        });
     }
 
     public void selectPicture(View view) {

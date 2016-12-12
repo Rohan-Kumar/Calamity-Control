@@ -31,7 +31,7 @@ public class HttpCall extends AsyncTask<Void, Void, Void> {
     View view;
     Context context;
 
-    ProgressDialog dialog;
+//    ProgressDialog dialog;
     HttpCall(String url, View view, Context context) {
         urlString = url;
         this.view = view;
@@ -43,18 +43,18 @@ public class HttpCall extends AsyncTask<Void, Void, Void> {
     protected void onPreExecute() {
         super.onPreExecute();
 
-        dialog = new ProgressDialog(context);
-        dialog.setIndeterminate(true);
-        dialog.setTitle("Loading");
-        dialog.setMessage("please wait...");
-        dialog.show();
+//        dialog = new ProgressDialog(context);
+//        dialog.setIndeterminate(true);
+//        dialog.setTitle("Loading");
+//        dialog.setMessage("please wait...");
+//        dialog.show();
     }
 
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
         Snackbar.make(view, "Reported!", LENGTH_SHORT).show();
-        dialog.dismiss();
+//        dialog.dismiss();
     }
 
     @Override
