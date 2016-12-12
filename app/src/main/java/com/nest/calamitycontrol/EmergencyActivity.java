@@ -9,6 +9,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,7 +50,7 @@ public class EmergencyActivity extends AppCompatActivity {
 
         DatabaseReference databaseRef;
 
-        databaseRef = FirebaseDatabase.getInstance().getReference("reports");
+        databaseRef = FirebaseDatabase.getInstance().getReference("emergency");
 
 
         databaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -57,6 +58,7 @@ public class EmergencyActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot data : dataSnapshot.getChildren()) {
                     EmergencyData datamodel = new EmergencyData();
+                    Log.d("TAG", "onDataChange: "+data);
                     datamodel.setName(data.child("name").getValue(String.class));
                     datamodel.setNumber(data.child("number").getValue(String.class));
 
