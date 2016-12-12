@@ -42,8 +42,8 @@ public class SplashActivity extends AppCompatActivity {
                 thread.start();
             } else {
                 //Displaying another toast if permission is not granted
-                Toast.makeText(this, "Please grant permission to use this app", Toast.LENGTH_LONG).show();
-                finish();
+                Intent intent = new Intent(SplashActivity.this, IVRActivity.class);
+                startActivity(intent);
             }
         }
     }
