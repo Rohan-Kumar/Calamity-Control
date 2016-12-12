@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity
 
         dialog = new ProgressDialog(MainActivity.this);
         dialog.setIndeterminate(true);
-        dialog.setTitle("Fetching location");
+        dialog.setMessage("Fetching location");
         dialog.show();
 
         Button quickReport = (Button) findViewById(R.id.quickReport);

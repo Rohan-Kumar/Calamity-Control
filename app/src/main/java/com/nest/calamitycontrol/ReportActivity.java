@@ -105,7 +105,7 @@ public class ReportActivity extends AppCompatActivity {
         });
     }
 
-    private void sendData(){
+    private void sendData() {
 
         if (selectedCalamity == 0)
             Toast.makeText(this, "Please select something to report", Toast.LENGTH_SHORT).show();
@@ -149,8 +149,8 @@ public class ReportActivity extends AppCompatActivity {
         postValues.put("time", getCurrentTimeStamp());
         postValues.put("description", description.getText().toString());
         postValues.put("calamity", list.get(selectedCalamity));
-        if(selectedImage){
-            postValues.put("isImagePresent",true);
+        if (selectedImage) {
+            postValues.put("isImagePresent", true);
         }
 
         Map<String, Object> childUpdates = new HashMap<>();
@@ -161,18 +161,23 @@ public class ReportActivity extends AppCompatActivity {
             public void onSuccess(Void aVoid) {
                 downloadUrl = null;
                 Log.d("TAG", "onSuccess: updated to db");
+                if (!selectedImage) {
+                    dialog.dismiss();
+                    Toast.makeText(ReportActivity.this, "Reported Successfully!", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
             }
         });
 
-        new HttpCall("http://204.152.203.111/test-cgi/genTweet.py?tweet=" + URLEncoder.encode(description.getText().toString() + " #CalamityControl"), findViewById(R.id.content_report),ReportActivity.this).execute();
+        new HttpCall("http://204.152.203.111/test-cgi/genTweet.py?tweet=" + URLEncoder.encode(description.getText().toString() + " #CalamityControl"), findViewById(R.id.content_report), ReportActivity.this).execute();
 
 
-        if (!selectedImage) {
-            dialog.dismiss();
+        if (selectedImage) {
+            uploadPic(key);
+        } else {
+//            dialog.dismiss();
 //                startActivity(new Intent(ReportActivity.this, MainActivity.class));
 //                finish();
-        }else{
-            uploadPic(key);
         }
 
     }
@@ -181,7 +186,7 @@ public class ReportActivity extends AppCompatActivity {
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReferenceFromUrl("gs://calamity-control-1478121312942.appspot.com/images");
 //        storageRef = storageRef.child(getCurrentTimeStamp().replaceAll(" ", "") + ".png");
-        storageRef = storageRef.child(key+".png");
+        storageRef = storageRef.child(key + ".png");
         imageView.setDrawingCacheEnabled(true);
         imageView.buildDrawingCache();
         Bitmap bitmap = imageView.getDrawingCache();
@@ -204,7 +209,8 @@ public class ReportActivity extends AppCompatActivity {
                 Log.d("TAG", "onSuccess: " + downloadUrl);
                 dialog.dismiss();
 //                        startActivity(new Intent(ReportActivity.this, MainActivity.class));
-//                        finish();
+                Toast.makeText(ReportActivity.this, "Reported Successfully!", Toast.LENGTH_SHORT).show();
+                finish();
 
             }
         });
