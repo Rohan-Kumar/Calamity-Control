@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -91,7 +92,17 @@ public class MainActivity extends AppCompatActivity
 
     private void sendQuickReport() {
 
-        new HttpCall("http://204.152.203.111/test-cgi/report.py?lat=" + latitude + "&lon=" + longitude, findViewById(R.id.content_main),MainActivity.this).execute();
+        final ProgressDialog pd = new ProgressDialog(MainActivity.this);
+        pd.setMessage("please wwait...");
+        pd.show();
+
+        new HttpCall("http://204.152.203.111/test-cgi/report.py?lat=" + latitude + "&lon=" + longitude, findViewById(R.id.content_main), MainActivity.this, new HttpCall.CallBack() {
+            @Override
+            public void completed() {
+                pd.dismiss();
+                Toast.makeText(MainActivity.this, "Repported Successfully", Toast.LENGTH_SHORT).show();
+            }
+        }).execute();
     }
 
     @Override

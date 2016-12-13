@@ -37,9 +37,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.nest.calamitycontrol.R.id.fill_vertical;
-import static com.nest.calamitycontrol.R.id.spinner;
-
 public class DetailedReportActivity extends AppCompatActivity {
 
     private static final int REQUEST_IMAGE_CAPTURE = 54321;

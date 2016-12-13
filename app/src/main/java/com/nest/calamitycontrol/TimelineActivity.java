@@ -33,10 +33,15 @@ public class TimelineActivity extends AppCompatActivity {
     ArrayList<TimelineData> dataModelArrayList = new ArrayList<>();
     ProgressDialog dialog;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
+
+        FirebaseDatabase.getInstance().getReference("reports").keepSynced(true);
+
         setupRecyclerView();
         getData();
         dialog = new ProgressDialog(TimelineActivity.this);

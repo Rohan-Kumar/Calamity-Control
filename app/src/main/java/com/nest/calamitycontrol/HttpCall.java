@@ -30,12 +30,14 @@ public class HttpCall extends AsyncTask<Void, Void, Void> {
     String urlString;
     View view;
     Context context;
+    CallBack callBack;
 
 //    ProgressDialog dialog;
-    HttpCall(String url, View view, Context context) {
+    HttpCall(String url, View view, Context context,CallBack callBack) {
         urlString = url;
         this.view = view;
         this.context = context;
+        this.callBack = callBack;
     }
 
 
@@ -54,6 +56,7 @@ public class HttpCall extends AsyncTask<Void, Void, Void> {
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
         Snackbar.make(view, "Reported!", LENGTH_SHORT).show();
+        callBack.completed();
 //        dialog.dismiss();
     }
 
@@ -97,5 +100,9 @@ public class HttpCall extends AsyncTask<Void, Void, Void> {
 
 
         return null;
+    }
+
+    public interface CallBack{
+        public void completed();
     }
 }
