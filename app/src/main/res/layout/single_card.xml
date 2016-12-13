@@ -51,7 +51,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:text="12:21:21 AM" />
+                android:text="12:21:21 AM"
+                android:layout_alignBottom="@+id/place"/>
 
         </RelativeLayout>
     </LinearLayout>

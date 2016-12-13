@@ -24,6 +24,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
@@ -40,7 +41,7 @@ import java.util.Map;
 public class DetailedReportActivity extends AppCompatActivity {
 
     private static final int REQUEST_IMAGE_CAPTURE = 54321;
-    Spinner calamityType,calamityLevel;
+    Spinner calamityType, calamityLevel;
     ImageView imageView;
     int selectedCalamity = 0;
     int selectedLevel = 0;
@@ -48,7 +49,7 @@ public class DetailedReportActivity extends AppCompatActivity {
     List<String> list = new ArrayList<String>();
     List<String> list2 = new ArrayList<String>();
     ProgressDialog dialog;
-    TextInputEditText description,area,city,landmark,phone;
+    TextInputEditText description, area, city, landmark, phone;
 
 
     double latitude;
@@ -112,7 +113,7 @@ public class DetailedReportActivity extends AppCompatActivity {
             }
         });
 
-        calamityLevel.setAdapter(new ArrayAdapter<String>(this,android.R.layout.simple_spinner_dropdown_item,list2));
+        calamityLevel.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, list2));
         calamityLevel.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -179,11 +180,11 @@ public class DetailedReportActivity extends AppCompatActivity {
         postValues.put("time", getCurrentTimeStamp());
         postValues.put("description", description.getText().toString());
         postValues.put("calamity", list.get(selectedCalamity));
-        postValues.put("level",list2.get(selectedLevel));
-        postValues.put("area",area.getText().toString());
-        postValues.put("city",city.getText().toString());
-        postValues.put("landmark",landmark.getText().toString());
-        postValues.put("phone",phone.getText().toString());
+        postValues.put("level", list2.get(selectedLevel));
+        postValues.put("area", area.getText().toString());
+        postValues.put("city", city.getText().toString());
+        postValues.put("landmark", landmark.getText().toString());
+        postValues.put("phone", phone.getText().toString());
 
         if (selectedImage) {
             postValues.put("isImagePresent", true);
@@ -253,6 +254,11 @@ public class DetailedReportActivity extends AppCompatActivity {
                 Toast.makeText(DetailedReportActivity.this, "Reported Successfully!", Toast.LENGTH_SHORT).show();
                 finish();
 
+            }
+        }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                Log.d("TAG", "onProgress: " + taskSnapshot.getBytesTransferred() + " / " + taskSnapshot.getTotalByteCount());
             }
         });
     }

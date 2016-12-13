@@ -44,9 +44,9 @@ public class TimelineActivity extends AppCompatActivity {
 
         setupRecyclerView();
         getData();
+
         dialog = new ProgressDialog(TimelineActivity.this);
         dialog.setIndeterminate(true);
-        dialog.setTitle("Loading");
         dialog.setMessage("please wait...");
         dialog.show();
     }
@@ -132,23 +132,28 @@ public class TimelineActivity extends AppCompatActivity {
                         datamodel.setName(data.child("calamity").getValue(String.class));
                         datamodel.setDesc(data.child("description").getValue(String.class));
                         datamodel.setTime(data.child("time").getValue(String.class));
+                        datamodel.setArea(data.child("area").getValue(String.class));
+                        datamodel.setCity(data.child("city").getValue(String.class));
+                        datamodel.setLandmark(data.child("landmark").getValue(String.class));
+                        datamodel.setLevel(data.child("level").getValue(String.class));
+
 //                    datamodel.setPlace(data.child("place").getValue(String.class));
 
 
-                        try {
-                            Geocoder geocoder;
-                            List<Address> addresses;
-                            geocoder = new Geocoder(TimelineActivity.this, Locale.getDefault());
-                            addresses = geocoder.getFromLocation(data.child("lat").getValue(Double.class), data.child("lng").getValue(Double.class), 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
-                            String city = addresses.get(0).getLocality(); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
-                            String country = addresses.get(0).getCountryName();
-                            String place = city + "," + country;
-                            datamodel.setPlace(place);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        } catch (IndexOutOfBoundsException i){
-                            i.printStackTrace();
-                        }
+//                        try {
+//                            Geocoder geocoder;
+//                            List<Address> addresses;
+//                            geocoder = new Geocoder(TimelineActivity.this, Locale.getDefault());
+//                            addresses = geocoder.getFromLocation(data.child("lat").getValue(Double.class), data.child("lng").getValue(Double.class), 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+//                            String city = addresses.get(0).getLocality(); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+//                            String country = addresses.get(0).getCountryName();
+//                            String place = city + "," + country;
+//                            datamodel.setPlace(place);
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        } catch (IndexOutOfBoundsException i){
+//                            i.printStackTrace();
+//                        }
 
 
                         dataModelArrayList.add(datamodel);
@@ -178,8 +183,8 @@ public class TimelineActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(RVAdapter.Holder holder, int position) {
             holder.name.setText(dataModelArrayList.get(position).getName());
-            holder.desc.setText(dataModelArrayList.get(position).getDesc());
-            holder.place.setText(dataModelArrayList.get(position).getPlace());
+            holder.desc.setText("Danger Level : "+dataModelArrayList.get(position).getLevel()+"\n"+dataModelArrayList.get(position).getDesc());
+            holder.place.setText(dataModelArrayList.get(position).landmark+",\n"+dataModelArrayList.get(position).getArea()+",\n"+dataModelArrayList.get(position).getCity());
             holder.time.setText(dataModelArrayList.get(position).getTime());
 
         }
