@@ -205,35 +205,35 @@ public class TimelineActivity extends AppCompatActivity {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(dataModelArrayList.get(position).getPhone()!=null){
-                        final String num = dataModelArrayList.get(position).getPhone();
-                        if(!num.equals("")){
-                            new AlertDialog.Builder(TimelineActivity.this).setTitle("Contact").setMessage(num).setPositiveButton("Call", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    Intent phoneIntent = new Intent(Intent.ACTION_CALL);
-                                    phoneIntent.setData(Uri.parse("tel:"+num));
-                                    if (ActivityCompat.checkSelfPermission(TimelineActivity.this, android.Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                                        // TODO: Consider calling
-                                        //    ActivityCompat#requestPermissions
-                                        // here to request the missing permissions, and then overriding
-                                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                                        //                                          int[] grantResults)
-                                        // to handle the case where the user grants the permission. See the documentation
-                                        // for ActivityCompat#requestPermissions for more details.
-                                        return;
+                        if(dataModelArrayList.get(position).getPhone()!=null){
+                            final String num = dataModelArrayList.get(position).getPhone();
+                            if(!num.equals("")){
+                                new AlertDialog.Builder(TimelineActivity.this).setTitle("Contact").setMessage(num).setPositiveButton("Call", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        Intent phoneIntent = new Intent(Intent.ACTION_CALL);
+                                        phoneIntent.setData(Uri.parse("tel:"+num));
+                                        if (ActivityCompat.checkSelfPermission(TimelineActivity.this, android.Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                                            // TODO: Consider calling
+                                            //    ActivityCompat#requestPermissions
+                                            // here to request the missing permissions, and then overriding
+                                            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                            //                                          int[] grantResults)
+                                            // to handle the case where the user grants the permission. See the documentation
+                                            // for ActivityCompat#requestPermissions for more details.
+                                            return;
+                                        }
+                                        startActivity(phoneIntent);
                                     }
-                                    startActivity(phoneIntent);
-                                }
-                            }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    dialogInterface.dismiss();
-                                }
-                            }).show();
-                        }
+                                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        dialogInterface.dismiss();
+                                    }
+                                }).show();
+                            }
 
-                    }
+                        }
                 }
             });
 

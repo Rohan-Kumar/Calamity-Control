@@ -1,10 +1,15 @@
 package com.nest.calamitycontrol;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -74,6 +79,7 @@ public class DonationsActivity extends AppCompatActivity {
                     datamodel.setName(data.child("name").getValue(String.class));
                     datamodel.setDonationItem(data.child("item").getValue(String.class));
                     datamodel.setPlace(data.child("place").getValue(String.class));
+                    datamodel.setNumber(data.child("number").getValue(String.class));
                     dataModelArrayList.add(datamodel);
                 }
                 Collections.reverse(dataModelArrayList);
@@ -96,10 +102,44 @@ public class DonationsActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onBindViewHolder(RVAdapter.Holder holder, int position) {
+        public void onBindViewHolder(RVAdapter.Holder holder, final int position) {
             holder.name.setText(dataModelArrayList.get(position).getName());
             holder.place.setText(dataModelArrayList.get(position).getPlace());
             holder.donation.setText(dataModelArrayList.get(position).getDonationItem());
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(dataModelArrayList.get(position).getNumber()!=null){
+                        final String num = dataModelArrayList.get(position).getNumber();
+                        if(!num.equals("")){
+                            new AlertDialog.Builder(DonationsActivity.this).setTitle("Contact").setMessage(num).setPositiveButton("Call", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    Intent phoneIntent = new Intent(Intent.ACTION_CALL);
+                                    phoneIntent.setData(Uri.parse("tel:"+num));
+                                    if (ActivityCompat.checkSelfPermission(DonationsActivity.this, android.Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                                        // TODO: Consider calling
+                                        //    ActivityCompat#requestPermissions
+                                        // here to request the missing permissions, and then overriding
+                                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                        //                                          int[] grantResults)
+                                        // to handle the case where the user grants the permission. See the documentation
+                                        // for ActivityCompat#requestPermissions for more details.
+                                        return;
+                                    }
+                                    startActivity(phoneIntent);
+                                }
+                            }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.dismiss();
+                                }
+                            }).show();
+                        }
+
+                    }
+                }
+            });
 
         }
 

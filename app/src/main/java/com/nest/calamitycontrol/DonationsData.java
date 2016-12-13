@@ -8,6 +8,15 @@ public class DonationsData {
     String name;
     String donationItem;
     String place;
+    String number;
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
 
     public String getPlace() {
         return place;
