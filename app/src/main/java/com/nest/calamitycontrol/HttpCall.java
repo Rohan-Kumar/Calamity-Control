@@ -55,7 +55,7 @@ public class HttpCall extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
-        Snackbar.make(view, "Reported!", LENGTH_SHORT).show();
+//        Snackbar.make(view, "Reported!", LENGTH_SHORT).show();
         callBack.completed();
 //        dialog.dismiss();
     }

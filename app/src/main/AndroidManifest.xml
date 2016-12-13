@@ -84,7 +84,7 @@
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".DetailedReportActivity"
-            android:label="Calamity Control"
+            android:label="Report"
             android:theme="@style/AppTheme.NoActionBar"/>
 
     </application>

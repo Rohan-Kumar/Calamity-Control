@@ -169,7 +169,12 @@ public class ReportActivity extends AppCompatActivity {
             }
         });
 
-        new HttpCall("http://204.152.203.111/test-cgi/genTweet.py?tweet=" + URLEncoder.encode(description.getText().toString() + " #CalamityControl"), findViewById(R.id.content_report), ReportActivity.this).execute();
+        new HttpCall("http://204.152.203.111/test-cgi/genTweet.py?tweet=" + URLEncoder.encode(description.getText().toString() + " #CalamityControl"), findViewById(R.id.content_report), ReportActivity.this, new HttpCall.CallBack() {
+            @Override
+            public void completed() {
+
+            }
+        }).execute();
 
 
         if (selectedImage) {

@@ -71,16 +71,16 @@ public class DetailedReportActivity extends AppCompatActivity {
 
         calamityType = (Spinner) findViewById(R.id.calamityType);
         calamityLevel = (Spinner) findViewById(R.id.level);
-        description = (TextInputEditText) findViewById(R.id.desc);
+        description = (TextInputEditText) findViewById(R.id.descEt);
         area = (TextInputEditText) findViewById(R.id.areaEt);
         city = (TextInputEditText) findViewById(R.id.cityEt);
         landmark = (TextInputEditText) findViewById(R.id.landmarkEt);
         phone = (TextInputEditText) findViewById(R.id.phoneEt);
 
         list.add("Select a Calamity");
+        list.add("Cyclone");
         list.add("Earthquake");
         list.add("Tsunami");
-        list.add("Cyclone");
         list.add("Hurricane");
         list.add("Tornado");
         list.add("Floods");
@@ -205,7 +205,12 @@ public class DetailedReportActivity extends AppCompatActivity {
             }
         });
 
-        new HttpCall("http://204.152.203.111/test-cgi/genTweet.py?tweet=" + URLEncoder.encode(description.getText().toString() + " #CalamityControl"), findViewById(R.id.content_report), DetailedReportActivity.this).execute();
+        new HttpCall("http://204.152.203.111/test-cgi/genTweet.py?tweet=" + URLEncoder.encode(description.getText().toString() + " #CalamityControl"), findViewById(R.id.content_report), DetailedReportActivity.this, new HttpCall.CallBack() {
+            @Override
+            public void completed() {
+
+            }
+        }).execute();
 
 
         if (selectedImage) {
