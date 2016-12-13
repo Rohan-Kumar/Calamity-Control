@@ -1,9 +1,16 @@
 package com.nest.calamitycontrol;
 
+import android.*;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,6 +28,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -136,6 +144,7 @@ public class TimelineActivity extends AppCompatActivity {
                         datamodel.setCity(data.child("city").getValue(String.class));
                         datamodel.setLandmark(data.child("landmark").getValue(String.class));
                         datamodel.setLevel(data.child("level").getValue(String.class));
+                        datamodel.setPhone(data.child("phone").getValue(String.class));
 
 //                    datamodel.setPlace(data.child("place").getValue(String.class));
 
@@ -181,17 +190,52 @@ public class TimelineActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onBindViewHolder(RVAdapter.Holder holder, int position) {
+        public void onBindViewHolder(RVAdapter.Holder holder, final int position) {
             holder.name.setText(dataModelArrayList.get(position).getName());
             holder.desc.setText("Danger Level : "+dataModelArrayList.get(position).getLevel()+"\n"+dataModelArrayList.get(position).getDesc());
-            String place;
+//            String place;
 //            if(dataModelArrayList.get(position).landmark.equals("")){
 //                place = dataModelArrayList.get(position).landmark+",\n"+dataModelArrayList.get(position).getArea()+",\n"+dataModelArrayList.get(position).getCity();
 //            }else{
 //                place = dataModelArrayList.get(position).getArea()+",\n"+dataModelArrayList.get(position).getCity();
 //            }
-            holder.place.setText(place = dataModelArrayList.get(position).landmark+"\n"+dataModelArrayList.get(position).getArea()+",\n"+dataModelArrayList.get(position).getCity());
+            holder.place.setText(dataModelArrayList.get(position).landmark+"\n"+dataModelArrayList.get(position).getArea()+",\n"+dataModelArrayList.get(position).getCity());
             holder.time.setText(dataModelArrayList.get(position).getTime());
+
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(dataModelArrayList.get(position).getPhone()!=null){
+                        final String num = dataModelArrayList.get(position).getPhone();
+                        if(!num.equals("")){
+                            new AlertDialog.Builder(TimelineActivity.this).setTitle("Contact").setMessage(num).setPositiveButton("Call", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    Intent phoneIntent = new Intent(Intent.ACTION_CALL);
+                                    phoneIntent.setData(Uri.parse("tel:"+num));
+                                    if (ActivityCompat.checkSelfPermission(TimelineActivity.this, android.Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                                        // TODO: Consider calling
+                                        //    ActivityCompat#requestPermissions
+                                        // here to request the missing permissions, and then overriding
+                                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                        //                                          int[] grantResults)
+                                        // to handle the case where the user grants the permission. See the documentation
+                                        // for ActivityCompat#requestPermissions for more details.
+                                        return;
+                                    }
+                                    startActivity(phoneIntent);
+                                }
+                            }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.dismiss();
+                                }
+                            }).show();
+                        }
+
+                    }
+                }
+            });
 
         }
 

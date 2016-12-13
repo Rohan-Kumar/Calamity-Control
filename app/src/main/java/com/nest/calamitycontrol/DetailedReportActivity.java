@@ -187,7 +187,7 @@ public class DetailedReportActivity extends AppCompatActivity {
         postValues.put("time", getCurrentTimeStamp());
         postValues.put("description", description.getText().toString());
         postValues.put("calamity", list.get(selectedCalamity));
-        postValues.put("level", list2.get(selectedLevel));
+        postValues.put("level", ""+(selectedLevel));
         postValues.put("area", area.getText().toString());
         postValues.put("city", city.getText().toString());
         postValues.put("landmark", landmark.getText().toString()+",");
