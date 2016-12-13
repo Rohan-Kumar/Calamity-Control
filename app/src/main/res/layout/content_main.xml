@@ -14,6 +14,14 @@
     tools:showIn="@layout/app_bar_main">
 
     <Button
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:background="@drawable/call"
+        android:layout_above="@+id/quickReport"
+        android:layout_alignRight="@+id/quickReport"
+        android:onClick="calIVRS"/>
+
+    <Button
         android:layout_width="256dp"
         android:layout_height="256dp"
         android:paddingTop="96dp"
