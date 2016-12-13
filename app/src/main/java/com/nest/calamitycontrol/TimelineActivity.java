@@ -184,7 +184,13 @@ public class TimelineActivity extends AppCompatActivity {
         public void onBindViewHolder(RVAdapter.Holder holder, int position) {
             holder.name.setText(dataModelArrayList.get(position).getName());
             holder.desc.setText("Danger Level : "+dataModelArrayList.get(position).getLevel()+"\n"+dataModelArrayList.get(position).getDesc());
-            holder.place.setText(dataModelArrayList.get(position).landmark+",\n"+dataModelArrayList.get(position).getArea()+",\n"+dataModelArrayList.get(position).getCity());
+            String place;
+//            if(dataModelArrayList.get(position).landmark.equals("")){
+//                place = dataModelArrayList.get(position).landmark+",\n"+dataModelArrayList.get(position).getArea()+",\n"+dataModelArrayList.get(position).getCity();
+//            }else{
+//                place = dataModelArrayList.get(position).getArea()+",\n"+dataModelArrayList.get(position).getCity();
+//            }
+            holder.place.setText(place = dataModelArrayList.get(position).landmark+"\n"+dataModelArrayList.get(position).getArea()+",\n"+dataModelArrayList.get(position).getCity());
             holder.time.setText(dataModelArrayList.get(position).getTime());
 
         }

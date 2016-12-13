@@ -93,14 +93,14 @@ public class MainActivity extends AppCompatActivity
     private void sendQuickReport() {
 
         final ProgressDialog pd = new ProgressDialog(MainActivity.this);
-        pd.setMessage("please wwait...");
+        pd.setMessage("please wait...");
         pd.show();
 
         new HttpCall("http://204.152.203.111/test-cgi/report.py?lat=" + latitude + "&lon=" + longitude, findViewById(R.id.content_main), MainActivity.this, new HttpCall.CallBack() {
             @Override
             public void completed() {
                 pd.dismiss();
-                Toast.makeText(MainActivity.this, "Repported Successfully", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Reported Successfully", Toast.LENGTH_SHORT).show();
             }
         }).execute();
     }

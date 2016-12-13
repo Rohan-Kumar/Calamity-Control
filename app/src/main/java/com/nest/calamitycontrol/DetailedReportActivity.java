@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
@@ -142,9 +141,17 @@ public class DetailedReportActivity extends AppCompatActivity {
             Toast.makeText(this, "Please select something to report", Toast.LENGTH_SHORT).show();
         else {
 
+
+
+            if(area.getText().toString() == null || area.getText().toString().equals("") || city.getText().toString() == null || city.getText().toString().equals("")){
+                Toast.makeText(this, "Please fill all the required details", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             dialog = new ProgressDialog(DetailedReportActivity.this);
             dialog.setMessage("loading...");
             dialog.show();
+
             updateDatabase();
         }
 
@@ -183,7 +190,7 @@ public class DetailedReportActivity extends AppCompatActivity {
         postValues.put("level", list2.get(selectedLevel));
         postValues.put("area", area.getText().toString());
         postValues.put("city", city.getText().toString());
-        postValues.put("landmark", landmark.getText().toString());
+        postValues.put("landmark", landmark.getText().toString()+",");
         postValues.put("phone", phone.getText().toString());
 
         if (selectedImage) {
@@ -239,7 +246,7 @@ public class DetailedReportActivity extends AppCompatActivity {
         UploadTask uploadTask = storageRef.putBytes(data);
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
-            public void onFailure(@NonNull Exception exception) {
+            public void onFailure( Exception exception) {
                 // Handle unsuccessful uploads
                 dialog.dismiss();
             }
