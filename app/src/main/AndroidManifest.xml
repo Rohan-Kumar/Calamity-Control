@@ -85,8 +85,7 @@
         <activity
             android:name=".DetailedReportActivity"
             android:label="Report"
-            android:theme="@style/AppTheme.NoActionBar"/>
-
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

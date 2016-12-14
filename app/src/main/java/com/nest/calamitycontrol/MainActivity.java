@@ -131,7 +131,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_volunteer) {
             startActivity(new Intent(MainActivity.this, VolunteerActivity.class));
         } else if (id == R.id.nav_timeline) {
-            startActivity(new Intent(MainActivity.this, TimelineActivity.class));
+            startActivity(new Intent(MainActivity.this, VolunteerMap.class));
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

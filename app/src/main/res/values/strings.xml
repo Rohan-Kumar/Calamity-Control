@@ -24,4 +24,4 @@
 
     <string name="warning">This information would be shared publicly, to help contact you in distress. <b>It\'s optional to share your contact information.</b> </string>
     <string name="title_activity_detailed_report">DetailedReportActivity</string>
-   </resources>
+</resources>

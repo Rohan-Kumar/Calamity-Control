@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/CalamityControl.iml" filepath="$PROJECT_DIR$/CalamityControl.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Calamity-Control-Android.iml" filepath="$PROJECT_DIR$/Calamity-Control-Android.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
