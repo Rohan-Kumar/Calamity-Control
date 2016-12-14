@@ -1,6 +1,5 @@
 package com.nest.calamitycontrol;
 
-import android.*;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
@@ -8,18 +7,19 @@ import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.Toast;
 
 import com.google.firebase.database.FirebaseDatabase;
 
 public class SplashActivity extends AppCompatActivity {
 
     int permissionCode = 555;
+    boolean permissionLocation = true;
+    boolean permissionCall = true;
+    boolean permissionStorage = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,10 +42,27 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     void requestPermission() {
-        if (ContextCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-            ActivityCompat.requestPermissions(SplashActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, permissionCode);
-        else
+        if ((ContextCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) && (ContextCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) && (ContextCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED))
             thread.start();
+        else {
+            if (ContextCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(SplashActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, permissionCode);
+                permissionLocation = false;
+                return;
+            }
+            if (ContextCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(SplashActivity.this, new String[]{Manifest.permission.CALL_PHONE}, permissionCode + 1);
+                permissionCall = false;
+                return;
+            }
+            if (ContextCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(SplashActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, permissionCode + 2);
+                permissionStorage = false;
+                return;
+            }
+        }
+
+
     }
 
     @Override
@@ -53,14 +70,40 @@ public class SplashActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == permissionCode) {
             //If permission is granted
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                thread.start();
-            } else {
+//            if ((grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) && permissionCall && permissionStorage) {
+//                thread.start();
+//                permissionLocation = true;
+//            } else {
                 //Displaying another toast if permission is not granted
-                Intent intent = new Intent(SplashActivity.this, IVRActivity.class);
-                startActivity(intent);
-                finish();
-            }
+                requestPermission();
+//                Intent intent = new Intent(SplashActivity.this, IVRActivity.class);
+//                startActivity(intent);
+//                finish();
+//            }
+        }
+        if (requestCode == permissionCode + 1) {
+            //If permission is granted
+//            if ((grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) && permissionLocation && permissionStorage) {
+//                thread.start();
+//            } else {
+                //Displaying another toast if permission is not granted
+                requestPermission();
+//                Intent intent = new Intent(SplashActivity.this, IVRActivity.class);
+//                startActivity(intent);
+//                finish();
+//            }
+        }
+        if (requestCode == permissionCode + 2) {
+            //If permission is granted
+//            if ((grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) && permissionCall && permissionLocation) {
+//                thread.start();
+//            } else {
+                //Displaying another toast if permission is not granted
+                requestPermission();
+//                Intent intent = new Intent(SplashActivity.this, IVRActivity.class);
+//                startActivity(intent);
+//                finish();
+//            }
         }
     }
 
